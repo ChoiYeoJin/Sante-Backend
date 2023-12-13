@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const { v4: uuidv4 } = require("uuid");
+const { v4 } = require("uuid");
+
+const uuid = () => {
+  const tokens = v4().split("-");
+  return tokens[2] + tokens[1] + tokens[0] + tokens[3] + tokens[4];
+};
 
 //name, pass to field, both type string
 const exerciseSchema = new Schema({
@@ -10,8 +15,7 @@ const exerciseSchema = new Schema({
   },
   exerciseId: {
     type: String,
-    unique: true,
-    default: uuidv4,
+    default: () => uuid(),
   },
   exerciseStartDate: {
     type: Date,
@@ -57,8 +61,7 @@ const foodSchema = new Schema({
   },
   foodId: {
     type: String,
-    unique: true,
-    default: uuidv4,
+    default: () => uuid(),
   },
   foodCategory: {
     type: String,
@@ -88,12 +91,12 @@ const userSchema = new Schema({
     default: null,
   },
   userFoodList: {
-    type: [exerciseSchema],
-    default: null,
+    type: [foodSchema],
+    default: [],
   },
   userExerciseList: {
-    type: [foodSchema],
-    default: null,
+    type: [exerciseSchema],
+    default: [],
   },
   lastUpdated: {
     type: Date,
@@ -113,4 +116,4 @@ const User = mongoose.model("User", userSchema);
 const Exercise = mongoose.model("Exercise", exerciseSchema);
 const Food = mongoose.model("Food", foodSchema);
 
-module.exports = User;
+module.exports = { User, Exercise, Food };
