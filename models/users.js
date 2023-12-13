@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const { v4: uuidv4 } = require("uuid");
+const { v4 } = require("uuid");
+
+const uuid = () => {
+  const tokens = v4().split("-");
+  return tokens[2] + tokens[1] + tokens[0] + tokens[3] + tokens[4];
+};
 
 //name, pass to field, both type string
 const exerciseSchema = new Schema({
@@ -11,7 +16,7 @@ const exerciseSchema = new Schema({
   exerciseId: {
     type: String,
     unique: true,
-    default: uuidv4,
+    default: () => uuid(),
   },
   exerciseStartDate: {
     type: Date,
@@ -58,7 +63,7 @@ const foodSchema = new Schema({
   foodId: {
     type: String,
     unique: true,
-    default: uuidv4,
+    default: () => uuid(),
   },
   foodCategory: {
     type: String,
@@ -89,11 +94,11 @@ const userSchema = new Schema({
   },
   userFoodList: {
     type: [exerciseSchema],
-    default: null,
+    default: [],
   },
   userExerciseList: {
     type: [foodSchema],
-    default: null,
+    default: [],
   },
   lastUpdated: {
     type: Date,
