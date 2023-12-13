@@ -17,7 +17,7 @@ router.get("/:email", async (req, res) => {
     console.log("Received request for email:", userEmail);
 
     // 사용자 이메일 주소를 기반으로 데이터를 조회해서 user로 저장
-    const user = await User.findOne({email: userEmail}); // 걍 이메일
+    const user = await User.findOne({ email: userEmail }); // 걍 이메일
     console.log("User found:", user);
 
     if (!user) {
