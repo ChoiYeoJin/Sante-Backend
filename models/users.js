@@ -15,7 +15,6 @@ const exerciseSchema = new Schema({
   },
   exerciseId: {
     type: String,
-    unique: true,
     default: () => uuid(),
   },
   exerciseStartDate: {
@@ -62,7 +61,6 @@ const foodSchema = new Schema({
   },
   foodId: {
     type: String,
-    unique: true,
     default: () => uuid(),
   },
   foodCategory: {
@@ -93,11 +91,11 @@ const userSchema = new Schema({
     default: null,
   },
   userFoodList: {
-    type: [exerciseSchema],
+    type: [foodSchema],
     default: [],
   },
   userExerciseList: {
-    type: [foodSchema],
+    type: [exerciseSchema],
     default: [],
   },
   lastUpdated: {
@@ -118,4 +116,4 @@ const User = mongoose.model("User", userSchema);
 const Exercise = mongoose.model("Exercise", exerciseSchema);
 const Food = mongoose.model("Food", foodSchema);
 
-module.exports = User;
+module.exports = { User, Exercise, Food };
