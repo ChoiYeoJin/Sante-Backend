@@ -113,4 +113,4 @@ const User = mongoose.model("User", userSchema);
 const Exercise = mongoose.model("Exercise", exerciseSchema);
 const Food = mongoose.model("Food", foodSchema);
 
-module.exports = User;
+module.exports = { User, Exercise, Food };
