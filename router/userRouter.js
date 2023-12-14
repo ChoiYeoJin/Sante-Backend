@@ -74,4 +74,63 @@ router.put("/", async (req, res) => {
   }
 });
 
+// 모든 유저 삭제
+router.delete("/delete-all", async (req, res) => {
+  User.deleteMany({})
+    .exec()
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.sendStatus(500);
+    });
+});
+
+// 개별 유저 삭제
+router.delete("/delete/:email", async (req, res) => {
+const email = req.params.email;
+console.log(userId);
+User.deleteOne({ email : email })
+    .exec()
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.sendStatus(500);
+      console.log(err);
+    });
+});
+
+// 운동 삭제
+router.delete("/delete/:exerciseId", async (req, res) => {
+  const exerciseId = req.params.exerciseId;
+  Exercise.deleteOne({ exerciseId: exerciseId })
+      .exec()
+      .then(() => {
+        res.sendStatus(200);
+      })
+      .catch((err) => {
+        res.sendStatus(500);
+        console.log(err);
+      });
+});
+
+// 식단 삭제
+router.delete("/delete/:foodId", async (req, res) => {
+  const foodId = req.params.foodId;
+ 
+  Food.deleteOne({ foodId: foodId })
+      .exec()
+      .then(() => {
+        res.sendStatus(200);
+      })
+      .catch((err) => {
+        res.sendStatus(500);
+        console.log(err);
+      });
+});
+
+
+
+
 module.exports = router;
