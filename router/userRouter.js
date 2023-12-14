@@ -74,4 +74,33 @@ router.put("/", async (req, res) => {
   }
 });
 
+// 모든 유저 삭제
+router.delete("/delete-all", async (req, res) => {
+  User.deleteMany({})
+    .exec()
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.sendStatus(500);
+    });
+});
+
+// 개별 유저 삭제
+router.delete("/delete/:email", async (req, res) => {
+const email = req.params.email;
+
+User.deleteOne({ email : email })
+    .exec()
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.sendStatus(500);
+      console.log(err);
+    });
+});
+
+
+
 module.exports = router;
