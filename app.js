@@ -28,9 +28,8 @@ mongoose
     console.log("MongoDB 연결 실패 : ", err);
   });
 
-
-app.listen(process.env.port, () => {
-  console.log(`server on port ${process.env.port}`);
+app.listen(port, () => {
+  console.log(`server on port ${port}`);
 });
 
 module.exports = app;
