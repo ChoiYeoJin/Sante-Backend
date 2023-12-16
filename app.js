@@ -3,7 +3,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
-// require("dotenv").config({ path: ".env.local" });
+const userRouter = require("./router/userRouter");
+const registerRouter = require("./router/registerRouter");
 
 const port = process.env.PORT;
 const uri = process.env.MONGO_CONNECTION;
@@ -14,6 +15,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
+// 라우터 세팅
+app.use("/user", userRouter);
+app.use("/register", registerRouter);
+
 mongoose
   .connect(uri)
   .then(() => {
@@ -22,5 +27,9 @@ mongoose
   .catch((err) => {
     console.log("MongoDB 연결 실패 : ", err);
   });
+
+app.listen(port, () => {
+  console.log(`server on port ${port}`);
+});
 
 module.exports = app;
