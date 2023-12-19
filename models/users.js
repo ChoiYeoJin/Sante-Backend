@@ -41,6 +41,10 @@ const exerciseSchema = new Schema({
     type: Date,
     default: null,
   },
+  isDone: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const foodItemSchema = new Schema({
