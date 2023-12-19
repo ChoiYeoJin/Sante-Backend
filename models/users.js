@@ -26,7 +26,7 @@ const exerciseSchema = new Schema({
     default: null,
   },
   exerciseTime: {
-    type: Date,
+    type: Number,
     default: null,
   },
   repeatDate: {
