@@ -41,10 +41,12 @@ const exerciseSchema = new Schema({
     type: Date,
     default: null,
   },
-  isDone: {
-    type: Boolean,
-    default: false,
-  },
+  scheduledDate: [
+    {
+      date: Date,
+      isDone: Boolean,
+    },
+  ],
 });
 
 const foodItemSchema = new Schema({
@@ -91,6 +93,10 @@ const userSchema = new Schema({
     required: true,
   },
   gender: {
+    type: String,
+    default: null,
+  },
+  age: {
     type: String,
     default: null,
   },
