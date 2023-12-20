@@ -49,20 +49,20 @@ const exerciseSchema = new Schema({
   ],
 });
 
-const foodItemSchema = new Schema({
-  name: {
-    type: String,
-    default: null,
-  },
-  calory: {
-    type: Number,
-    default: null,
-  },
-});
-
 const foodSchema = new Schema({
   foodList: {
-    type: [foodItemSchema],
+    type: [
+      {
+        foodCategory: String,
+        totalCalory: String,
+        menu: [
+          {
+            name: String,
+            calory: Number,
+          },
+        ],
+      },
+    ],
     default: null,
   },
   foodId: {
