@@ -63,15 +63,10 @@ const foodSchema = new Schema({
         ],
       },
     ],
-    default: null,
   },
   foodId: {
     type: String,
     default: () => uuid(),
-  },
-  foodCategory: {
-    type: String,
-    default: null,
   },
   createdAt: {
     type: Date,
