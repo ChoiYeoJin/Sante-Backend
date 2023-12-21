@@ -4,12 +4,13 @@ const { User } = require("../models/users");
 router.post("", async (req, res) => {
   try {
     console.log(req.body);
-    const { email, password, gender } = req.body;
+    const { email, password, gender, age } = req.body;
 
     const newUser = new User({
       email,
       password,
       gender,
+      age,
     });
 
     await newUser.save();
