@@ -54,7 +54,7 @@ const foodSchema = new Schema({
     type: [
       {
         foodCategory: String,
-        totalCalory: String,
+        totalCalory: Number,
         menu: [
           {
             name: String,
