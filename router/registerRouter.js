@@ -4,7 +4,7 @@ const { User } = require("../models/users");
 router.post("", async (req, res) => {
   try {
     console.log(req.body);
-    const { email, password, gender, age } = req.body;
+    const { email, password, gender, age, todayCalory } = req.body;
 
     const newUser = new User({
       email,
