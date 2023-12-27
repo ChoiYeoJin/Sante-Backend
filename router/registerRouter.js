@@ -11,6 +11,7 @@ router.post("", async (req, res) => {
       password,
       gender,
       age,
+      todayCalory,
     });
 
     await newUser.save();
