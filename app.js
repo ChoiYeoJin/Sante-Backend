@@ -19,7 +19,7 @@ app.use(cors());
 // 라우터 세팅
 app.use("/user", userRouter);
 app.use("/register", registerRouter);
-app.use("/kakao", kakaoRouter);
+app.use("/auth", kakaoRouter);
 
 mongoose
   .connect(uri)
