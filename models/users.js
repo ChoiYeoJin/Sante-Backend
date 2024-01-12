@@ -92,7 +92,7 @@ const userSchema = new Schema({
     default: null,
   },
   age: {
-    type: String,
+    type: Number,
     default: null,
   },
   userFoodList: {
