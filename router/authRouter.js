@@ -1,8 +1,7 @@
 const router = require("express").Router();
 const axios = require("axios");
-const jwtUtil = require("../utils/jwtUtil");
+const createUserToken = require("../utils/jwtUtil");
 const { User } = require("../models/users");
-
 
 const calculateAge = (birthYear) => {
     // 현재 년도 가져오기
@@ -70,11 +69,11 @@ router.post("/kakao", async (req, res) => {
             console.log(newUser);
 
             // jwt 생성
-            const jwToken = jwtUtil.createUserToken(userEmail);
+            const jwToken = createUserToken(userEmail);
             return res.json({ jwToken });
         } else {
             // jwt 생성
-            const jwToken = jwtUtil.createUserToken(userEmail);
+            const jwToken = createUserToken(userEmail);
             return res.json({ jwToken });
         }
     } catch (error) {
