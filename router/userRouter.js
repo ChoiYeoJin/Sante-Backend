@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const authenticateToken = require("../middleware/authenticateToken");
 const { User, Exercise, Food } = require("../models/users");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
@@ -38,7 +39,6 @@ router.post("/login", async (req, res) => {
 
     const user = await User.findOne({
       email: email,
-      password: password,
     });
 
     if (!user) {
@@ -70,6 +70,9 @@ router.post("/login", async (req, res) => {
       code: 200,
       message: "토큰이 생성되었습니다.",
       token: token,
+      email: user.email,
+      gender: user.gender,
+      age: user.age,
     });
   } catch (error) {
     return res.status(419).json({
