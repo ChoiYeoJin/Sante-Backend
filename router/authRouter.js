@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const axios = require("axios");
 const createUserToken = require("../utils/jwtUtil");
 const { User } = require("../models/users");
 
@@ -36,48 +35,34 @@ const calculateAge = (birthYear) => {
 
 router.post("/kakao", async (req, res) => {
     try {
-        const token = req.body;
-        const ACCESS_TOKEN = token.accessToken;
+        const {email, password, age, gender } = req.body;
 
-        // 유저 정보 가져오기
-        const userInfo = await axios.get("https://kapi.kakao.com/v2/user/me",
-            {
-                headers: {
-                    Authorization: `Bearer ${ACCESS_TOKEN}`,
-                },
-            }
-        );
-
-        const userData = userInfo.data.kakao_account;
-        const birthyear = Number(userInfo.data.kakao_account.birthyear);
+        const birthyear = Number(age);
         const birthYearNumber = calculateAge(birthyear);
-        const userEmail = userData.email;
 
         // 일치하는 유저가 있는지 찾기
-        const findUser = await User.findOne({ email: userData.email });
+        const findUser = await User.findOne({ email: email });
 
         if (!findUser) {
             // 일치하는 유저가 없으면 새로운 유저 생성 및 db에 저장
             const newUser = new User({
-                email: userData.email,
-                password: userData.email,
+                email: email,
+                password: password,
                 age: birthYearNumber,
-                gender: userData.gender,
+                gender: gender,
             });
 
             await newUser.save();
-            console.log(newUser);
 
-            // jwt 생성
-            const jwToken = createUserToken(userEmail);
-            return res.json({ jwToken });
+            // 새로운 유저 jwt 생성
+            const token = createUserToken(email);
+            return res.json({ token });
         } else {
-            // jwt 생성
-            const jwToken = createUserToken(userEmail);
-            return res.json({ jwToken });
+            // 기존 유저 jwt 생성
+            const token = createUserToken(email);
+            return res.json({ token });
         }
     } catch (error) {
-        console.log(error);
         res.status(500).json({ error: "내부 서버 오류" });
     }
 });
