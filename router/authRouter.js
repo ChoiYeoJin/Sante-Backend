@@ -35,8 +35,7 @@ const calculateAge = (birthYear) => {
 
 router.post("/kakao", async (req, res) => {
     try {
-        const {email, password, age, gender } = req.body;
-
+        const { email, password, age, gender } = req.body;
         const birthyear = Number(age);
         const birthYearNumber = calculateAge(birthyear);
 
@@ -54,13 +53,27 @@ router.post("/kakao", async (req, res) => {
 
             await newUser.save();
 
-            // 새로운 유저 jwt 생성
-            const token = createUserToken(email);
-            return res.json({ token });
+            // 새로운 유저 데이터 생성
+            const token = createUserToken(newUser);
+            return res.status(200).json({
+                code: 200,
+                message: "토큰이 생성되었습니다.",
+                token: token,
+                email: newUser.email,
+                gender: newUser.gender,
+                age: newUser.age,
+            });
         } else {
-            // 기존 유저 jwt 생성
-            const token = createUserToken(email);
-            return res.json({ token });
+            // 기존 유저 데이터 생성
+            const token = createUserToken(findUser);
+            return res.status(200).json({
+                code: 200,
+                message: "토큰이 생성되었습니다.",
+                token: token,
+                email: findUser.email,
+                gender: findUser.gender,
+                age: findUser.age,
+            });
         }
     } catch (error) {
         res.status(500).json({ error: "내부 서버 오류" });
