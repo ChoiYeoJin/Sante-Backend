@@ -69,7 +69,7 @@ router.post("/login", async (req, res) => {
     return res.status(200).json({
       code: 200,
       message: "토큰이 생성되었습니다.",
-      token: `Bearer ${token}`,
+      token: token,
       email: user.email,
       gender: user.gender,
       age: user.age,
