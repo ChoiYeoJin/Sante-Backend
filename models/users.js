@@ -26,7 +26,7 @@ const exerciseSchema = new Schema({
     default: null,
   },
   exerciseTime: {
-    type: Date,
+    type: Number,
     default: null,
   },
   repeatDate: {
@@ -41,31 +41,32 @@ const exerciseSchema = new Schema({
     type: Date,
     default: null,
   },
-});
-
-const foodItemSchema = new Schema({
-  name: {
-    type: String,
-    default: null,
-  },
-  calory: {
-    type: Number,
-    default: null,
-  },
+  scheduledDate: [
+    {
+      date: Date,
+      isDone: Boolean,
+    },
+  ],
 });
 
 const foodSchema = new Schema({
   foodList: {
-    type: [foodItemSchema],
-    default: null,
+    type: [
+      {
+        foodCategory: String,
+        totalCalory: Number,
+        menu: [
+          {
+            name: String,
+            calory: Number,
+          },
+        ],
+      },
+    ],
   },
   foodId: {
     type: String,
     default: () => uuid(),
-  },
-  foodCategory: {
-    type: String,
-    default: null,
   },
   createdAt: {
     type: Date,
@@ -88,6 +89,10 @@ const userSchema = new Schema({
   },
   gender: {
     type: String,
+    default: null,
+  },
+  age: {
+    type: Number,
     default: null,
   },
   userFoodList: {

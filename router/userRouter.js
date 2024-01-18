@@ -1,12 +1,20 @@
-const router = require('express').Router();
+const router = require("express").Router();
+const authenticateToken = require("../middleware/authenticateToken");
 const { User, Exercise, Food } = require("../models/users");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
-router.post("/check", async (req, res) => {
+router.get("/check", authenticateToken, async (req, res) => {
   try {
-    const userData = req.body; 
-    console.log("데이터 요청 받음:", userData);
+    const { email } = req.decoded;
+    console.log("데이터 요청 받음:", {
+      email: email,
+    });
 
-    const user = await User.findOne(userData); 
+    const user = await User.findOne({
+      email: email,
+    });
     console.log("사용자 찾음:", user);
 
     if (!user) {
@@ -24,7 +32,57 @@ router.post("/check", async (req, res) => {
   }
 });
 
-router.put("/", async (req, res) => {
+router.post("/login", async (req, res) => {
+  try {
+    const key = process.env.JWT_SECRET;
+    const { email, password } = req.body;
+
+    const user = await User.findOne({
+      email: email,
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "사용자를 찾을 수 없습니다." });
+    }
+
+    // 비밀번호 해싱된 값과 비교
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res
+        .status(401)
+        .json({ code: 401, message: "비밀번호가 일치하지 않습니다." });
+    }
+
+    const token = jwt.sign(
+      {
+        type: "JWT",
+        email: email,
+      },
+      key,
+      {
+        expiresIn: "24h",
+        issuer: "토큰발급자",
+      }
+    );
+
+    return res.status(200).json({
+      code: 200,
+      message: "토큰이 생성되었습니다.",
+      token: token,
+      email: user.email,
+      gender: user.gender,
+      age: user.age,
+    });
+  } catch (error) {
+    return res.status(419).json({
+      code: 419,
+      message: error,
+    });
+  }
+});
+
+router.put("/", authenticateToken, async (req, res) => {
   try {
     const user = req.body;
 
@@ -53,12 +111,11 @@ router.put("/", async (req, res) => {
   }
 });
 
-
 // 개별 유저 삭제
-router.delete("/:email", async (req, res) => {
-const email = req.params.email;
+router.delete("/", authenticateToken, async (req, res) => {
+  const email = req.decoded.email;
 
-User.deleteOne({ email : email })
+  User.deleteOne({ email: email })
     .exec()
     .then(() => {
       res.sendStatus(200);
@@ -67,6 +124,19 @@ User.deleteOne({ email : email })
       res.sendStatus(500);
       console.log(err);
     });
+});
+
+router.get("/payload", authenticateToken, async (req, res) => {
+  console.log(req.decoded);
+  const { email } = req.decoded;
+
+  return res.status(200).json({
+    code: 200,
+    message: "토큰이 정상입니다.",
+    data: {
+      email: email,
+    },
+  });
 });
 
 module.exports = router;
